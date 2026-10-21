@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import wordmark from "@/assets/qartuno-wordmark.png.asset.json";
 import { ButtonLink } from "./ui-kit";
 
 const NAV = [
@@ -14,7 +13,14 @@ const NAV = [
 ] as const;
 
 export function Logo({ className = "h-9" }: { className?: string }) {
-  return <img src={wordmark.url} alt="QARTUNO — Scan. Pay. Go." className={`${className} w-auto`} width={900} height={215} />;
+  return (
+    <span
+      className={`inline-flex items-center font-heading text-xl font-bold tracking-tight text-navy ${className}`}
+      aria-label="QARTUNO — Scan. Pay. Go."
+    >
+      QARTUNO
+    </span>
+  );
 }
 
 export function SiteHeader() {
@@ -22,7 +28,9 @@ export function SiteHeader() {
   return (
     <>
       <div className="bg-navy text-navy-foreground">
-        <p className="container-site py-2 text-center text-xs md:text-sm">Smarter supermarket shopping starts here.</p>
+        <p className="container-site py-2 text-center text-xs md:text-sm">
+          Smarter supermarket shopping starts here.
+        </p>
       </div>
       <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
         <div className="container-site flex h-16 items-center justify-between gap-4">
@@ -42,7 +50,9 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <ButtonLink to="/contact" size="sm" className="hidden sm:inline-flex">Book a Demo</ButtonLink>
+            <ButtonLink to="/contact" size="sm" className="hidden sm:inline-flex">
+              Book a Demo
+            </ButtonLink>
             <button
               type="button"
               className="inline-flex size-10 items-center justify-center rounded-lg border lg:hidden"
@@ -59,12 +69,25 @@ export function SiteHeader() {
           <nav id="mobile-nav" aria-label="Mobile" className="border-t bg-background lg:hidden">
             <div className="container-site flex flex-col py-3">
               {NAV.map((n) => (
-                <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="rounded-lg px-2 py-3 font-medium hover:bg-muted">
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-3 font-medium hover:bg-muted"
+                >
                   {n.label}
                 </Link>
               ))}
-              <Link to="/faq" onClick={() => setOpen(false)} className="rounded-lg px-2 py-3 font-medium hover:bg-muted">FAQ</Link>
-              <ButtonLink to="/contact" className="mt-2">Book a Demo</ButtonLink>
+              <Link
+                to="/faq"
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-2 py-3 font-medium hover:bg-muted"
+              >
+                FAQ
+              </Link>
+              <ButtonLink to="/contact" className="mt-2">
+                Book a Demo
+              </ButtonLink>
             </div>
           </nav>
         )}
@@ -75,9 +98,32 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   const cols = [
-    { title: "Product", links: [["/how-it-works", "How It Works"], ["/features", "Features"], ["/shoppers", "For Shoppers"], ["/faq", "FAQ"]] },
-    { title: "Retailers", links: [["/retailers", "For Retailers"], ["/pricing", "Pricing"], ["/contact", "Book a Demo"]] },
-    { title: "Company", links: [["/about", "About Us"], ["/contact", "Contact"], ["/privacy", "Privacy Policy"], ["/terms", "Terms and Conditions"]] },
+    {
+      title: "Product",
+      links: [
+        ["/how-it-works", "How It Works"],
+        ["/features", "Features"],
+        ["/shoppers", "For Shoppers"],
+        ["/faq", "FAQ"],
+      ],
+    },
+    {
+      title: "Retailers",
+      links: [
+        ["/retailers", "For Retailers"],
+        ["/pricing", "Pricing"],
+        ["/contact", "Book a Demo"],
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        ["/about", "About Us"],
+        ["/contact", "Contact"],
+        ["/privacy", "Privacy Policy"],
+        ["/terms", "Terms and Conditions"],
+      ],
+    },
   ];
   return (
     <footer className="border-t bg-muted">
@@ -95,7 +141,9 @@ export function SiteFooter() {
               {c.links.map(([to, label]) => (
                 <li key={label}>
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <Link to={to as any} className="text-sm text-muted-foreground hover:text-primary">{label}</Link>
+                  <Link to={to as any} className="text-sm text-muted-foreground hover:text-primary">
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -793,3 +793,59 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Retailer portal and MongoDB setup
+
+The retailer portal at `/retailers?portal=1` uses MongoDB through the official
+MongoDB Node.js driver. It requires a Node.js server and is not deployable to
+Cloudflare Workers. Collections and indexes are created automatically when the
+portal first connects. No database credentials are committed to this repository.
+
+1. Create a MongoDB Atlas cluster (or use a MongoDB server reachable by the app)
+   and create a database user with access to the application database. Allow
+   connections from the server where the app will run.
+2. Copy `.env.example` to `.env` and set `MONGODB_URI`. Encode special
+   characters in the username or password as required by a MongoDB connection
+   URI. `MONGODB_DB_NAME` is optional; it defaults to `qartuno` or uses the
+   database name in the URI.
+3. On first setup, set `QARTUNO_ADMIN_EMAIL` and `QARTUNO_ADMIN_PASSWORD` to
+   bootstrap the platform administrator. Use a unique, long password; remove
+   these bootstrap variables after the administrator account has been created.
+   Changing them later does not reset the stored password.
+   If the admin password needs to be reset or its sign-in is temporarily
+   rate-limited, update those two values in `.env` and run `npm run admin:reset`.
+   This updates only the platform admin, clears that admin's active sessions
+   and sign-in lock, and keeps the rate limit enabled for future sign-in attempts.
+4. Install dependencies and run `npm run dev`. Sign in to the retailer portal
+   as the administrator and create owner accounts. Share each temporary
+   password through a separate secure channel. Public retailer sign-up is
+   intentionally disabled.
+5. Store owners can manage their product catalogue and stock, and review order
+   records. The portal creates demonstration orders only; they are marked
+   `Demo — not paid`, do not decrement stock, and are excluded from verified
+   sales. A payment provider, payment verification, and real shopper checkout
+   are not integrated.
+6. The Contact page saves demo enquiries to MongoDB after privacy consent.
+   Email delivery/notifications are not configured: the form confirms database
+   storage, but does not claim that an email was sent or that a team member was
+   notified.
+
+Production builds use Nitro's `node-server` preset. Run `npm run build`, set
+the required environment variables on your Node.js host, then start the
+application with `npm start` (Node.js 20.19+ or 22.12+ is recommended). Keep
+database and admin bootstrap credentials in private server environment
+variables, never in `VITE_*` variables or browser code. Passwords use
+PBKDF2-HMAC SHA-256 with 600,000 iterations.
+
+For local development, the npm scripts load `.env` into the Node.js server
+process. The database variables stay server-side and are not injected into
+browser code. The retailer portal reports a missing database configuration
+rather than falling back to in-memory or sample data.
+
+Switching from the former Turso/libSQL backend does not copy existing records.
+If you already created retailer accounts, products, or orders in Turso, export
+and migrate them to MongoDB before removing that database.
+
+Never send MongoDB passwords or complete connection strings in chat. Store
+them in your local `.env` file and in your hosting provider's private
+environment-variable settings.
